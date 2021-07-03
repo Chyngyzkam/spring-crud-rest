@@ -27,7 +27,7 @@ public class RestUserController {
     @GetMapping
     public ResponseEntity<List<User>> getAll() {
         try {
-            return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -59,10 +59,12 @@ public class RestUserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PutMapping
-    public ResponseEntity<User> update(@RequestBody User user) {
+@CrossOrigin
+    @PutMapping("/{byId}")
+    public ResponseEntity<User> update(@PathVariable("byId") Long userId, @RequestBody User user) {
         try {
+            user.setId(userId);
+
             return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

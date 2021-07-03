@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUser() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String s) {
-        List<User> users = getAllUser();
+        List<User> users = getAllUsers();
         return users.stream().filter(x -> x.getName().equals(s)).findAny().orElse(null);
     }
 }
