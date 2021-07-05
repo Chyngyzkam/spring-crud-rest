@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,10 +35,11 @@ public class RestUserController {
 
     }
 
-    @GetMapping("/{byId}")
-    public ResponseEntity<User> getById(@PathVariable("byId") Long userId) {
+    @GetMapping("/user")
+    public ResponseEntity<User> getByName(Principal principal) {
+        System.out.println(principal.getName());
         try {
-            return new ResponseEntity(userService.getById(userId), HttpStatus.OK);
+            return new ResponseEntity(userService.findByEmail(principal.getName()), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -45,21 +47,20 @@ public class RestUserController {
 
     @PostMapping
     public ResponseEntity<User> AddUser(@RequestBody User user) {
-               try {
-                   Set<Role> roleBD= new HashSet<>();
-                   roleBD.add(roleService.getRoleByName("ROLE_USER"));
-                   User userObj= new User();
-                   userObj.setName(user.getName());
-                   userObj.setPassword(user.getPassword());
-                   userObj.setAge(user.getAge());
-                   userObj.setRoles(roleBD);
+        try {
+            Set<Role> roleBD = new HashSet<>();
+            roleBD.add(roleService.getRoleByName("ROLE_USER"));
 
-            return new ResponseEntity<>(userService.addUser(userObj), HttpStatus.OK);
+            user.setRoles(roleBD);
+
+
+            return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-@CrossOrigin
+
+    @CrossOrigin
     @PutMapping("/{byId}")
     public ResponseEntity<User> update(@PathVariable("byId") Long userId, @RequestBody User user) {
         try {
@@ -72,7 +73,7 @@ public class RestUserController {
     }
 
     @DeleteMapping("/{byId}")
-    public ResponseEntity<User> delete(@PathVariable("byId")  Long userId) {
+    public ResponseEntity<User> delete(@PathVariable("byId") Long userId) {
         try {
             userService.deleteById(userId);
             return new ResponseEntity(HttpStatus.OK);

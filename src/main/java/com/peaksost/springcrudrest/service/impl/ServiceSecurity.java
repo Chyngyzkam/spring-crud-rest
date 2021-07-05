@@ -27,7 +27,7 @@ public class ServiceSecurity implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userService.findByUsername(s);
+        User user = userService.findByEmail(s);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 for (Role role: user.getRoles()){
 grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));

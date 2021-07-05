@@ -24,7 +24,10 @@ public class User implements UserDetails {
 
     @Column(name = "name")
     String name;
-
+    @Column(name = "surname")
+    String surname;
+    @Column(name = "email")
+    String email;
     @Column(name = "password")
     String password;
 
@@ -37,7 +40,7 @@ public class User implements UserDetails {
     )
 
 
-    Set<Role>roles = new HashSet<>();
+    Set<Role> roles = new HashSet<>();
 
 
     @Override
@@ -48,7 +51,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override

@@ -10,11 +10,23 @@
     <h1 style="background-color: gray">Users table</h1>
 </div>
 </head>
-<body style="background-color: #c2ffb4">
+<body style="background-color: #e9eee7">
 <div class="d-flex">
     <button class="btn btn-outline-success" data-toggle="modal" data-target="#addUser">add new user</button>
+    <div style="padding-left: 40px
+">
     <button class="btn btn-warning" ><a href="/logout">logout</a></button>
+    </div>
+    <br>
+    <div style="padding-left: 40px">
+    <button class="btn btn-success" ><a href="/api/user" >User table</a></button>
+    </div>
+    <br>
+    <div style="padding-left: 40px">
+    <button class="btn btn-success" ><a href="/api/admin">Admin table</a></button>
+    </div>
 </div>
+
 <div class="container">
     <table id="users_table" class="table table-hover table-striped">
     </table>
@@ -35,10 +47,22 @@
                         <br>
                         <input type="text" class="control-input col-sm-10" id="name" placeholder="Name">
                     </div>
+
+                    <div class="form-group" align="center">
+                        <label for="name">Surname</label>
+                        <br>
+                        <input type="text" class="control-input col-sm-10" id="surname" placeholder="Surname">
+                    </div>
+
+                    <div class="form-group" align="center">
+                        <label for="name">email</label>
+                        <br>
+                        <input type="email" class="control-input col-sm-10" id="email" placeholder="Email">
+                    </div>
                     <div class="form-group" align="center">
                         <label for="password">Password</label>
                         <br>
-                        <input type="text" class="control-input col-sm-10" id="password" placeholder="Password">
+                        <input type="password" class="control-input col-sm-10" id="password" placeholder="Password">
                     </div>
                     <div class="form-group" align="center">
                         <label   for="age">Age</label>
@@ -91,9 +115,16 @@
     admin.addEventListener('submit', function (event) {
         event.preventDefault();
         let name = document.getElementById('name').value;
+        let surname = document.getElementById('surname').value;
+        let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
         let age = document.getElementById('age').value;
+        console.log(surname)
+        console.log(password)
+        console.log(email)
         console.log(name)
+        console.log(surname)
+        console.log(email)
         console.log(password)
         console.log(age)
         fetch(url, {
@@ -103,6 +134,8 @@
             },
             body: JSON.stringify({
                 name: name,
+                surname: surname,
+                email: email,
                 password: password,
                 age: age,
             })
@@ -116,6 +149,8 @@
             document.location.href = 'http://localhost:8000/api/admin'
         }
     });
+
+
     //Delete method:
     const table = document.querySelector('table');
     table.addEventListener('click', (e) => {
@@ -171,6 +206,8 @@
             <tr>
             <th scope="col">id</th>
             <th scope="col">name</th>
+            <th scope="col">surname</th>
+            <th scope="col">email</th>
             <th scope="col">password</th>
             <th scope="col">age</th>
             <th style="color: blueviolet" scope="col">edit</th>
@@ -180,10 +217,12 @@
                     li += `<tr>
                 <td>${u.id}</td>
                 <td>${u.name}</td>
+                <td>${u.surname}</td>
+                <td>${u.email}</td>
                 <td>${u.password}</td>
                 <td>${u.age}</td>
                 <td><button class="btn btn-outline-success" data-toggle="modal" data-target="#UpdateUser"
-                onclick="updates(${u.id},'${u.name}','${u.password}','${u.age}')"
+                onclick="updates(${u.id},'${u.name}', '${u.surname}', '${u.email}','${u.password}','${u.age}')"
                 >Update</button></td>
                 <td><button data-id="${u.id}" class="btn"><a href="#" id="delete-post">Delete</a></button></td>
             </tr>`
@@ -192,14 +231,24 @@
             })
     }
     getAllUsers()
+
     // onclick="updateUser2(${u.id},${u.name},${u.password},${u.age})"
-    function updates(id,name,password,age) {
-        console.log("test")
+    function updates(id,name, surname, email, password,age) {
         let ht = `                 <form id="registerEdit" >
                      <div class="form-group" align="center">
                          <label for="name">Name</label>
                          <br>
                          <input type="text" class="control-input col-sm-10" id="nameEdit" value="${name}">
+                     </div>
+                      <div class="form-group" align="center">
+                         <label for="name">Surname</label>
+                         <br>
+                         <input type="text" class="control-input col-sm-10" id="surnameEdit" value="${surname}">
+                     </div>
+                      <div class="form-group" align="center">
+                         <label for="name">Email</label>
+                         <br>
+                         <input type="email" class="control-input col-sm-10" id="emailEdit" value="${email}">
                      </div>
                      <div class="form-group" align="center">
                          <label for="password">Password</label>
@@ -229,11 +278,11 @@
         editForm.addEventListener('submit', async function (event) {
         event.preventDefault();
         let nameE = document.getElementById('nameEdit').value;
+        let surnameE = document.getElementById('surnameEdit').value;
+        let emailE = document.getElementById('emailEdit').value;
         let passwordE = document.getElementById('passwordEdit').value;
         let ageE = document.getElementById('ageEdit').value;
-        console.log(nameE)
-        console.log(passwordE)
-        console.log(ageE)
+
         fetch(url+`/${id}`, {
         method: "PUT",
         headers: {
@@ -241,6 +290,8 @@
         },
         body: JSON.stringify({
         name: nameE,
+        surname: surnameE,
+        email: emailE,
         password: passwordE,
         age: ageE,
         })

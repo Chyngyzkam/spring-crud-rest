@@ -48,4 +48,10 @@ public class UserServiceImpl implements UserService {
         List<User> users = getAllUsers();
         return users.stream().filter(x -> x.getName().equals(s)).findAny().orElse(null);
     }
+
+    @Override
+    public User findByEmail(String s) {
+        List<User> users = getAllUsers();
+        return users.stream().filter(x -> x.getEmail().equals(s)).findAny().orElse(null);
+    }
 }

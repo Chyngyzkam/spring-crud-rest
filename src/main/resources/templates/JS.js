@@ -24,11 +24,13 @@ admin.addEventListener('submit', function (event) {
     }).then(function (data) {
         console.log(data)
     })
-    setTimeout(test,300);
-    function test() {
+    setTimeout(time,300);
+    function time() {
         document.location.href = 'index1.html'
     }
 });
+
+
 //Delete method:
 const table = document.querySelector('table');
 table.addEventListener('click', (e) => {
@@ -89,16 +91,16 @@ async function getAllUsers() {
             <th style="color: blueviolet" scope="col">edit</th>
             <th style="color: red" scope="col">delete</th>
             </tr>`
-            users.forEach(u => {
+            users.forEach(user => {
                 li += `<tr>
-                <td>${u.id}</td>
-                <td>${u.name}</td>
-                <td>${u.password}</td>
-                <td>${u.age}</td>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.password}</td>
+                <td>${user.age}</td>
                 <td><button class="btn btn-outline-success" data-toggle="modal" data-target="#UpdateUser" 
-                onclick="updates(${u.id},'${u.name}','${u.password}','${u.age}')" 
+                onclick="updates(${user.id},'${user.name}','${user.password}','${user.age}')" 
                 >Update</button></td>
-                <td><button data-id="${u.id}" class="btn"><a href="#" id="delete-post">Delete</a></button></td>
+                <td><button data-id="${user.id}" class="btn"><a href="#" id="delete-post">Delete</a></button></td>
             </tr>`
             });
             document.getElementById("users_table").innerHTML = li;
@@ -106,6 +108,8 @@ async function getAllUsers() {
 }
 getAllUsers()
 // onclick="updateUser2(${u.id},${u.name},${u.password},${u.age})"
+
+//Update methods forma:
 function updates(id,name,password,age) {
     console.log("test")
     let ht = `                 <form id="registerEdit" >
@@ -138,6 +142,8 @@ function updates(id,name,password,age) {
                  </form>
 `;
     document.getElementById("EditUserTest").innerHTML = ht;
+
+    // update methods fetch
     const editForm = document.getElementById('registerEdit');
     editForm.addEventListener('submit', async function (event) {
         event.preventDefault();
