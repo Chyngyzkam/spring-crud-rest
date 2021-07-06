@@ -64,7 +64,11 @@ public class RestUserController {
     @PutMapping("/{byId}")
     public ResponseEntity<User> update(@PathVariable("byId") Long userId, @RequestBody User user) {
         try {
+            Set<Role> roleBD = new HashSet<>();
+            roleBD.add(roleService.getRoleByName("ROLE_USER"));
+
             user.setId(userId);
+            user.setRoles(roleBD);
 
             return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
         } catch (Exception e) {

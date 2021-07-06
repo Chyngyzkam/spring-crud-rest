@@ -26,6 +26,8 @@ public class User implements UserDetails {
     String name;
     @Column(name = "surname")
     String surname;
+    @Column(name = "gander")
+    String gender;
     @Column(name = "email")
     String email;
     @Column(name = "password")

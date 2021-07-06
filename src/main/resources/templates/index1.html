@@ -11,19 +11,19 @@
 </div>
 </head>
 <body style="background-color: #e9eee7">
-<div class="d-flex">
-    <button class="btn btn-outline-success" data-toggle="modal" data-target="#addUser">add new user</button>
-    <div style="padding-left: 40px
-">
-    <button class="btn btn-warning" ><a href="/logout">logout</a></button>
+<div class="d-flex" >
+    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUser">add new user</button>
+
+    <br>
+    <div style="padding-left: 40px">
+    <button class="btn btn-outline-primary"><a href="/api/user">User table</a></button>
     </div>
     <br>
     <div style="padding-left: 40px">
-    <button class="btn btn-success" ><a href="/api/user" >User table</a></button>
+    <button class="btn btn-outline-primary" ><a href="/api/admin">Admin table</a></button>
     </div>
-    <br>
     <div style="padding-left: 40px">
-    <button class="btn btn-success" ><a href="/api/admin">Admin table</a></button>
+        <button class="btn btn-outline-light"><a href="/logout">log out</a></button>
     </div>
 </div>
 
@@ -31,6 +31,7 @@
     <table id="users_table" class="table table-hover table-striped">
     </table>
 </div>
+
 <!--//POST Method:-->
 <!--Modal-->
 <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="#addUserLabel" aria-hidden="true">
@@ -52,6 +53,12 @@
                         <label for="name">Surname</label>
                         <br>
                         <input type="text" class="control-input col-sm-10" id="surname" placeholder="Surname">
+                    </div>
+
+                    <div class="form-group" align="center">
+                        <label for="name">Gender</label>
+                        <br>
+                        <input type="text" class="control-input col-sm-10" id="gender" placeholder="Gender">
                     </div>
 
                     <div class="form-group" align="center">
@@ -78,7 +85,7 @@
                     <!--                    </div>-->
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn btn-outline-success" type="submit">Save</button>
+                        <button class="btn btn-outline-primary" type="submit">Save</button>
                     </div>
                 </form>
             </div>
@@ -116,6 +123,7 @@
         event.preventDefault();
         let name = document.getElementById('name').value;
         let surname = document.getElementById('surname').value;
+        let gender = document.getElementById('gender').value;
         let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
         let age = document.getElementById('age').value;
@@ -135,6 +143,7 @@
             body: JSON.stringify({
                 name: name,
                 surname: surname,
+                gender: gender,
                 email: email,
                 password: password,
                 age: age,
@@ -204,27 +213,36 @@
             .then(users => {
                 let li = `
             <tr>
-            <th scope="col">id</th>
-            <th scope="col">name</th>
-            <th scope="col">surname</th>
-            <th scope="col">email</th>
-            <th scope="col">password</th>
-            <th scope="col">age</th>
-            <th style="color: blueviolet" scope="col">edit</th>
-            <th style="color: red" scope="col">delete</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Email</th>
+            <th scope="col">Password</th>
+            <th scope="col">Age</th>
+            <th scope="col">Role</th>
+            <th style="color: blueviolet" scope="col">Edit</th>
+            <th style="color: red" scope="col">Delete</th>
             </tr>`
                 users.forEach(u => {
+                    let userRole='';
+                    for (let i=0; i<u.roles.length; i++){
+                        userRole+=u.roles[i].role
+                    }
                     li += `<tr>
                 <td>${u.id}</td>
                 <td>${u.name}</td>
                 <td>${u.surname}</td>
+                <td>${u.gender}</td>
                 <td>${u.email}</td>
                 <td>${u.password}</td>
                 <td>${u.age}</td>
+                <td>${userRole}</td>
                 <td><button class="btn btn-outline-success" data-toggle="modal" data-target="#UpdateUser"
-                onclick="updates(${u.id},'${u.name}', '${u.surname}', '${u.email}','${u.password}','${u.age}')"
+                onclick="updates(${u.id},'${u.name}', '${u.surname}', '${u.gender}', '${u.email}','${u.password}','${u.age}')"
                 >Update</button></td>
-                <td><button data-id="${u.id}" class="btn"><a href="#" id="delete-post">Delete</a></button></td>
+                <td> <button  data-id="${u.id}" class="btn btn-outline-danger"><a href="#" id="delete-post">Delete</a></button></td>
+
             </tr>`
                 });
                 document.getElementById("users_table").innerHTML = li;
@@ -233,7 +251,7 @@
     getAllUsers()
 
     // onclick="updateUser2(${u.id},${u.name},${u.password},${u.age})"
-    function updates(id,name, surname, email, password,age) {
+    function updates(id,name, surname, gender, email, password,age) {
         let ht = `                 <form id="registerEdit" >
                      <div class="form-group" align="center">
                          <label for="name">Name</label>
@@ -246,6 +264,11 @@
                          <input type="text" class="control-input col-sm-10" id="surnameEdit" value="${surname}">
                      </div>
                       <div class="form-group" align="center">
+                         <label for="name">Gender</label>
+                         <br>
+                         <input type="text" class="control-input col-sm-10" id="genderEdit" value="${gender}">
+                     </div>
+                      <div class="form-group" align="center">
                          <label for="name">Email</label>
                          <br>
                          <input type="email" class="control-input col-sm-10" id="emailEdit" value="${email}">
@@ -253,7 +276,7 @@
                      <div class="form-group" align="center">
                          <label for="password">Password</label>
                          <br>
-                         <input type="text" class="control-input col-sm-10" id="passwordEdit" value="${password}">
+                         <input type="password" class="control-input col-sm-10" id="passwordEdit" value="${password}">
                      </div>
                      <div class="form-group" align="center">
                          <label   for="age">Age</label>
@@ -262,6 +285,8 @@
                      </div>
                      <div class="form-group" align="center">
                      </div>
+ </div>
+
                      <!--                    <a href="#" class="card-link">Edit</a>-->
                      <!--                    <a href="#" class="card-link">Delete</a>-->
                      <!--                    <div class="form-group" align="center">-->
@@ -269,7 +294,7 @@
         <!--                    </div>-->
         <div class="modal-footer">
         <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-outline-success" type="submit">Save</button>
+        <button class="btn btn-outline-success" type="submit">Edit</button>
         </div>
         </form>
         `;
@@ -279,6 +304,7 @@
         event.preventDefault();
         let nameE = document.getElementById('nameEdit').value;
         let surnameE = document.getElementById('surnameEdit').value;
+        let genderE = document.getElementById('genderEdit').value;
         let emailE = document.getElementById('emailEdit').value;
         let passwordE = document.getElementById('passwordEdit').value;
         let ageE = document.getElementById('ageEdit').value;
@@ -291,6 +317,7 @@
         body: JSON.stringify({
         name: nameE,
         surname: surnameE,
+        gender: genderE,
         email: emailE,
         password: passwordE,
         age: ageE,
